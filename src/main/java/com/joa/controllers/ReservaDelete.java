@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
@@ -19,35 +14,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "ReservaDelete", urlPatterns = {"/ReservaDelete"})
 public class ReservaDelete extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
             ReservaDAO reservaDAO = new ReservaDAO();
             CanchaDAO canchaDAO = new CanchaDAO();
 
             String fecha = request.getParameter("idFechaDelete");
             int idCancha = Integer.parseInt(request.getParameter("idCanchaDelete"));
-            int idHora = Integer.parseInt(request.getParameter("idHoraDelete"));
+            String horaInicio = request.getParameter("horaInicioDeleteLbl");
 
-            boolean elimino = reservaDAO.delete(fecha, idCancha, idHora);
+            boolean elimino = reservaDAO.delete2(fecha, idCancha, horaInicio);
             request.setAttribute("elimino", elimino);
 
             //RETORNAR LA LISTA
@@ -59,7 +41,7 @@ public class ReservaDelete extends HttpServlet {
             String idsCanchas = "";
             
             for (CanchaTO cancha : canchas) {
-                cancha.setReservas(reservaDAO.list(cancha.getId(), fecha));                
+                cancha.setReservas(reservaDAO.list2(cancha.getId(), fecha));                
                 idsCanchas += cancha.getId() +",";
             }
             idsCanchas = StringUtils.deleteLastChar(idsCanchas);
@@ -69,11 +51,6 @@ public class ReservaDelete extends HttpServlet {
             String estadosHidden = request.getParameter("estadosDelete");
             SelectDAO selectDAO = new SelectDAO();
             List<SelectTO> estados = selectDAO.list("reservasEstados");
-            
-            SelectTO selectLibre = new SelectTO();
-            selectLibre.setId(0);
-            selectLibre.setDescripcion("Libre");
-            estados.add(0, selectLibre);
             
             if(estadosHidden == null){
                 estadosHidden = "";

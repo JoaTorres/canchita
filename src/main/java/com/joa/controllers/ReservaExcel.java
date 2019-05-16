@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
@@ -32,27 +27,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "ReservaExcel", urlPatterns = {"/ReservaExcel"})
 public class ReservaExcel extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
             ReservaDAO reservaDAO = new ReservaDAO();
             CanchaDAO canchaDAO = new CanchaDAO();
 
@@ -64,7 +46,7 @@ public class ReservaExcel extends HttpServlet {
             request.setAttribute("canchas", canchas);
 
             for (CanchaTO cancha : canchas) {
-                cancha.setReservas(reservaDAO.listExcel(cancha.getId(), fecha, estados));
+                cancha.setReservas(reservaDAO.listExcel2(cancha.getId(), fecha, estados));
             }
 
             response.setContentType("application/vnd.ms-excel");
@@ -165,7 +147,7 @@ public class ReservaExcel extends HttpServlet {
                 Cell header0 = header.createCell(0);
                 header0.setCellStyle(headerStyle);
                 header0.setCellValue("R E P O R T E   R E S E R V A S");
-                CellRangeAddress region = CellRangeAddress.valueOf("A1:H1");
+                CellRangeAddress region = CellRangeAddress.valueOf("A1:L1");
                 sheet.addMergedRegion(region);
                 rowNum++;
 
@@ -194,6 +176,26 @@ public class ReservaExcel extends HttpServlet {
                 Cell subHeaderCell7 = subheader1.createCell(colNum);
                 subHeaderCell7.setCellStyle(subHeaderStyle);
                 subHeaderCell7.setCellValue("COSTO");
+                colNum++;
+
+                Cell subHeaderCelDescuento = subheader1.createCell(colNum);
+                subHeaderCelDescuento.setCellStyle(subHeaderStyle);
+                subHeaderCelDescuento.setCellValue("DESCUENTO");
+                colNum++;
+
+                Cell subHeaderCelTotal = subheader1.createCell(colNum);
+                subHeaderCelTotal.setCellStyle(subHeaderStyle);
+                subHeaderCelTotal.setCellValue("TOTAL");
+                colNum++;
+
+                Cell subHeaderCelPagado = subheader1.createCell(colNum);
+                subHeaderCelPagado.setCellStyle(subHeaderStyle);
+                subHeaderCelPagado.setCellValue("PAGADO");
+                colNum++;
+
+                Cell subHeaderCelSaldo = subheader1.createCell(colNum);
+                subHeaderCelSaldo.setCellStyle(subHeaderStyle);
+                subHeaderCelSaldo.setCellValue("SALDO");
                 colNum++;
 
                 //VENTAS GRAV.
@@ -256,8 +258,28 @@ public class ReservaExcel extends HttpServlet {
                             colNum++;
                             
                             Cell dataCosto = data.createCell(colNum);
-                            dataCosto.setCellValue(obj.getTarifa());
+                            dataCosto.setCellValue(obj.getCosto());
                             dataCosto.setCellStyle(dataValRightStyle);
+                            colNum++;
+                            
+                            Cell dataDescuento = data.createCell(colNum);
+                            dataDescuento.setCellValue(obj.getDescuento());
+                            dataDescuento.setCellStyle(dataValRightStyle);
+                            colNum++;
+                            
+                            Cell dataTotal = data.createCell(colNum);
+                            dataTotal.setCellValue(obj.getTotal());
+                            dataTotal.setCellStyle(dataValRightStyle);
+                            colNum++;
+                            
+                            Cell dataPagado = data.createCell(colNum);
+                            dataPagado.setCellValue(obj.getPagado());
+                            dataPagado.setCellStyle(dataValRightStyle);
+                            colNum++;
+                            
+                            Cell dataSaldo = data.createCell(colNum);
+                            dataSaldo.setCellValue(obj.getSaldo());
+                            dataSaldo.setCellStyle(dataValRightStyle);
                             colNum++;
                             
                             Cell dataCliente = data.createCell(colNum);

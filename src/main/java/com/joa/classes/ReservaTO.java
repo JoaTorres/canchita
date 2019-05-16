@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.classes;
 
-/**
- *
- * @author developer
- */
 public class ReservaTO {
 
     private int id;
@@ -26,10 +17,67 @@ public class ReservaTO {
     private String dni;
     private String telefono;
     
+    private String tarifa;
     
-private String tarifa;
+    //Atributos para el precio por minuto
+    private double precioPorMinuto;
+    private double costo;
+    private double descuento;
+    private double total;
+    private double pagado;
+    private double saldo;
 
     public ReservaTO() {
+    }
+
+    public double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public double getPagado() {
+        return pagado;
+    }
+
+    public void setPagado(double pagado) {
+        this.pagado = pagado;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    
+    
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
+    }
+    
+    public double getPrecioPorMinuto() {
+        return precioPorMinuto;
+    }
+
+    public void setPrecioPorMinuto(double precioPorMinuto) {
+        this.precioPorMinuto = precioPorMinuto;
     }
 
     public int getIdEstado() {

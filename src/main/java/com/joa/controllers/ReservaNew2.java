@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
-import com.joa.classes.HorarioTO;
-import com.joa.dao.HorarioDAO;
+import com.joa.classes.CanchaTO;
+import com.joa.classes.ReservaTO;
+import com.joa.dao.CanchaDAO;
+import com.joa.dao.ReservaDAO;
+import com.joa.utils.DateUtils;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,53 +13,61 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
-@WebServlet(name = "HorarioNew", urlPatterns = {"/HorarioNew"})
-public class HorarioNew extends HttpServlet {
+@WebServlet(name = "ReservaNew2", urlPatterns = {"/ReservaNew2"})
+public class ReservaNew2 extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
-            HorarioDAO objDAO = new HorarioDAO();
-            
-            int id = request.getParameter("id") == null ? 0 :  Integer.parseInt(request.getParameter("id"));
+            ReservaDAO reservaDAO = new ReservaDAO();
+
+            int canchaId = Integer.parseInt(request.getParameter("canchas"));
+            String fecha = request.getParameter("fecha");
             String horaInicio = request.getParameter("horaInicio");
             String horaFin = request.getParameter("horaFin");
-            double tarifa = request.getParameter("tarifa") == null ? 0.0 : Double.parseDouble(request.getParameter("tarifa"));
+            double costo = Double.parseDouble(request.getParameter("costo"));
+            String cliente = request.getParameter("cliente");
+            String dni = request.getParameter("dni");
+            String telefono = request.getParameter("telefono");
+            int idEstado = 1;
+
+            ReservaTO obj = new ReservaTO();
+
+            obj.setIdCancha(canchaId);
+            obj.setFecha(fecha);
+            obj.setHoraInicio(horaInicio);
+            obj.setHoraFin(horaFin);
+            obj.setCosto(costo);
+            obj.setCliente(cliente);
+            obj.setDni(dni);
+            obj.setTelefono(telefono);
+            obj.setIdEstado(idEstado);
             
-            HorarioTO objTO = new HorarioTO();
-            objTO.setId(id);
-            objTO.setHoraInicio(horaInicio);
-            objTO.setHoraFin(horaFin);
-            objTO.setTarifa(tarifa);
-            
-            int respuesta = objDAO.update(objTO);
-            request.setAttribute("respuesta", respuesta);
-            
-            //RETORNAR LA LISTA
-            List<HorarioTO> list = objDAO.list();
-            request.setAttribute("list", list);
+            boolean inserted = reservaDAO.insert2(obj);
+            request.setAttribute("inserted", inserted);  
+            request.setAttribute("login", 0);  
             
             
-            getServletConfig().getServletContext().getRequestDispatcher("/horarioList.jsp").forward(request, response);
+            
+            
+            
+            //RETORNAR
+            
+            String today = DateUtils.localDateToFullString(DateUtils.getToday());
+            request.setAttribute("today", today);   
+            
+            CanchaDAO objDAO = new CanchaDAO();
+            List<CanchaTO> canchas = objDAO.list();
+            request.setAttribute("canchas", canchas);
+            
+            
+            
+            getServletConfig().getServletContext().getRequestDispatcher("/reservaForm2.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("ERROR @HorarioNew: " + e);
+            System.out.println("ERROR @ReservaNew2: " + e);
         }
     }
 

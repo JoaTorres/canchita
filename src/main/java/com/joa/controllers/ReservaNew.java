@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.ReservaTO;
-import com.joa.dao.HorarioDAO;
 import com.joa.dao.ReservaDAO;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,30 +11,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "ReservaNew", urlPatterns = {"/ReservaNew"})
 public class ReservaNew extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            
+        request.setCharacterEncoding("UTF-8");
+        try {            
             ReservaDAO reservaDAO = new ReservaDAO();
-            HorarioDAO horarioDAO = new HorarioDAO();
             
             List<Boolean> respuestas = new ArrayList();
 
@@ -80,7 +59,7 @@ public class ReservaNew extends HttpServlet {
             getServletConfig().getServletContext().getRequestDispatcher(urlHorario).forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("ERROR @ReservaForm: " + e);
+            System.out.println("ERROR @ReservaNew: " + e);
         }
     }
 

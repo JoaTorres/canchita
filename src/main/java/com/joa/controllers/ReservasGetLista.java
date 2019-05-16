@@ -1,45 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.joa.classes.ReservaTO;
+import com.joa.dao.ReservaDAO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
-@WebServlet(name = "UserLogout", urlPatterns = {"/UserLogout"})
-public class UserLogout extends HttpServlet {
+@WebServlet(name = "ReservasGetLista", urlPatterns = {"/ReservasGetLista"})
+public class ReservasGetLista extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
-            request.getSession().invalidate();
-
-            getServletConfig().getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+            int idCancha = Integer.parseInt(request.getParameter("idCancha"));
+            String fecha = request.getParameter("fecha");
+            ReservaDAO objB = new ReservaDAO();
+            List<ReservaTO> obj = objB.listReservas(idCancha, fecha);
+            
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            String json = ow.writeValueAsString(obj);
+                        
+            response.getWriter().write(json);
             
         } catch (Exception e) {
-            System.out.println("ERROR @UserLogout: " +e);
+            System.out.println("ERROR @ReservasGetLista: " + e);
         }
     }
 

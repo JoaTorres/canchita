@@ -64,11 +64,16 @@
                             </c:choose>
                         </c:forEach>
                     </select>
-                    <input style="display: none;" class="form-control" type="text" id="estadosHidden" name="estadosHidden" value="${estadosHidden}"/>
+                    <input hidden class="form-control" type="text" id="estadosHidden" name="estadosHidden" value="${estadosHidden}"/>
 
 
                     <hr>
 
+
+
+                    <button class="btn btn-info form-control mb-2" id="nuevaReservaBtn" data-toggle="modal" data-target="#myNewModal">
+                        <span class="fas fa-plus"></span> Reserva
+                    </button>
 
                     <form action="ReservaExcel" method="post" class="form-horizontal" role="form" id="formulario" name="formulario">
                         <input style="display: none;" type="text" class="form-control" name="fechaExcel" id="fechaExcel" value="${fecha}">
@@ -84,6 +89,7 @@
 
                 </div>
             </div>
+
             <div id="main">
                 <div class="col-md-12">
                     <br>
@@ -93,114 +99,103 @@
                     <h2><span class="fas fa-futbol"></span> Reservas</h2>
                     <input style="display: none;" class="form-control" type="text" id="idsCanchas" name="idsCanchas" value="${idsCanchas}"/>
 
-                    <div class="col-md-12"> 
-                        <ul class="nav nav-tabs" id="newTabs" role="tablist">
-                            <c:forEach var="cancha" items="${canchas}">
-                                <li class="nav-item">
-                                    <a class="nav-link <c:if test="${cancha.id == 1}">active</c:if>" data-toggle="tab" href="#panel${cancha.id}">${cancha.nombre}</a>
-                                    </li>
-                            </c:forEach>
-                        </ul>
+                    <div class="row">
+                        <div class="col-md-12"> 
+                            <ul class="nav nav-tabs" id="newTabs" role="tablist">
+                                <c:forEach var="cancha" items="${canchas}">
+                                    <li class="nav-item">
+                                        <a class="nav-link <c:if test="${cancha.id == 1}">active</c:if>" data-toggle="tab" href="#panel${cancha.id}">${cancha.nombre}</a>
+                                        </li>
+                                </c:forEach>
+                            </ul>
 
-                        <div class="tab-content">
-                            <c:forEach var="cancha" items="${canchas}">
-                                <div id="panel${cancha.id}" class="tab-pane fade <c:if test="${cancha.id == 1}">show active</c:if>">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <table id="tabla${cancha.id}" class="table table-bordered table-hover table-sm nowrap display">
-                                                <thead>
-                                                    <tr class="thead-dark">
+                            <div class="tab-content">
+                                <c:forEach var="cancha" items="${canchas}">
+                                    <div id="panel${cancha.id}" class="tab-pane fade <c:if test="${cancha.id == 1}">show active</c:if>">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table id="tabla${cancha.id}" class="table table-bordered table-hover table-sm nowrap display">
+                                                    <thead>
+                                                        <tr class="thead-dark">
 
-                                                        <th class="text-center" style="display: none;">idEstado</th>
-                                                        <th class="text-center">Estado</th>
-                                                        <th class="text-center">Fecha</th>
-                                                        <th class="text-center">Hora I.</th>
-                                                        <th class="text-center">Hora F.</th>
-                                                        <th class="text-center">Costo</th>
-                                                        <th class="text-center">Cliente</th>
-                                                        <th class="text-center">DNI</th>
-                                                        <th class="text-center">Teléfono</th>
-                                                        <th class="text-center">Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="reserva" items="${cancha.reservas}">
-                                                        <tr>
-
-                                                            <td class="text-center" style="display: none;">${reserva.idEstado}</td>
-
-                                                            <c:choose>
-                                                                <c:when test="${reserva.idEstado eq '1'}">
-                                                                    <td class="table-secondary"><strong>${reserva.estado}</strong></td>
-                                                                        </c:when>
-                                                                        <c:when test="${reserva.idEstado eq '2'}">
-                                                                    <td class="table-success"><strong>${reserva.estado}</strong></td>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                    <td class="">Libre</td>
-                                                                </c:otherwise>
-                                                            </c:choose>
-
-
-                                                            <td class="text-center">${reserva.fecha}</td>
-                                                            <td class="text-center">${reserva.horaInicio}</td>
-                                                            <td class="text-center">${reserva.horaFin}</td>
-                                                            <td class="text-right">${reserva.tarifa}</td>
-                                                            <td>${reserva.cliente}</td>
-                                                            <td>${reserva.dni}</td>
-                                                            <td>${reserva.telefono}</td>
-                                                            <td>
-                                                                <c:choose>
-                                                                    <c:when test="${empty reserva.cliente}">
-                                                                        <button style="margin-bottom: 5px;" class="btn btn-info btn-sm btnClicked mb-0" id="editar" idHora ="${reserva.id}" idCancha ="${reserva.idCancha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#myNewModal">
-                                                                            <span class="fas fa-edit"></span> Nueva
-                                                                        </button>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <button style="margin-bottom: 5px;" class="btn btn-warning btn-sm btnClicked mb-0" id="editar" idHora ="${reserva.id}" idCancha ="${reserva.idCancha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#myNewModal">
-                                                                            <span class="fas fa-edit"></span> Editar
-                                                                        </button>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-
-                                                                <c:choose>
-                                                                    <c:when test="${empty reserva.cliente}">
-                                                                        <button style="margin-bottom: 5px;" class="btn btn-danger btn-sm btnEliminarClicked mb-0" id="eliminar" idHora ="${reserva.id}" idCancha ="${reserva.idCancha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#modalDelete" disabled="">
-                                                                            <span class="fas fa-trash"></span> Eliminar
-                                                                        </button>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <button style="margin-bottom: 5px;" class="btn btn-danger btn-sm btnEliminarClicked mb-0" id="eliminar" idHora ="${reserva.id}" idCancha ="${reserva.idCancha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#modalDelete">
-                                                                            <span class="fas fa-trash"></span> Eliminar
-                                                                        </button>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-
-
-
-                                                            </td>
+                                                            <th class="text-center" style="display: none;">idEstado</th>
+                                                            <th class="text-center">Estado</th>
+                                                            <th class="text-center">Fecha</th>
+                                                            <th class="text-center">Hora I.</th>
+                                                            <th class="text-center">Hora F.</th>
+                                                            <th class="text-center">Costo</th>
+                                                            <th class="text-center">Descuento</th>
+                                                            <th class="text-center">Total</th>
+                                                            <th class="text-center">Pagado</th>
+                                                            <th class="text-center">Saldo</th>
+                                                            <th class="text-center">Cliente</th>
+                                                            <th class="text-center">DNI</th>
+                                                            <th class="text-center">Teléfono</th>
+                                                            <th class="text-center">Acciones</th>
                                                         </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="reserva" items="${cancha.reservas}">
+                                                            <tr>
 
+                                                                <td class="text-center" style="display: none;">${reserva.idEstado}</td>
+
+                                                                <c:choose>
+                                                                    <c:when test="${reserva.idEstado eq '1'}">
+                                                                        <td class="table-secondary"><strong>${reserva.estado}</strong></td>
+                                                                            </c:when>
+                                                                            <c:when test="${reserva.idEstado eq '2'}">
+                                                                        <td class="table-success"><strong>${reserva.estado}</strong></td>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                        <td class="">Libre</td>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+
+
+                                                                <td class="text-center">${reserva.fecha}</td>
+                                                                <td class="text-center">${reserva.horaInicio}</td>
+                                                                <td class="text-center">${reserva.horaFin}</td>
+                                                                <td class="text-right">${reserva.costo}</td>
+                                                                <td class="text-right">${reserva.descuento}</td>
+                                                                <td class="text-right">${reserva.total}</td>
+                                                                <td class="text-right">${reserva.pagado}</td>
+                                                                <td class="text-right">${reserva.saldo}</td>
+                                                                <td>${reserva.cliente}</td>
+                                                                <td>${reserva.dni}</td>
+                                                                <td>${reserva.telefono}</td>
+                                                                <td>
+
+                                                                    <button style="margin-bottom: 5px;" class="btn btn-warning btn-sm btnClicked mb-0" id="editar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#myNewModal">
+                                                                        <span class="fas fa-edit"></span> Editar
+                                                                    </button>
+
+                                                                    <button style="margin-bottom: 5px;" class="btn btn-danger btn-sm btnEliminarClicked mb-0" id="eliminar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#modalDelete">
+                                                                        <span class="fas fa-trash"></span> Eliminar
+                                                                    </button>
+
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </c:forEach>
+                                </c:forEach>
+                            </div>
                         </div>
-
                     </div>
+                    
                 </div>
-            </div>      
-
-
+            </div>    
 
 
             <!-- Modal New -->
             <div class="modal fade" id="myNewModal" role="dialog" aria-labelledby="myNewModal" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <form action="ReservaNewAdmin" method="post" class="form-horizontal" role="form" id="formulario" name="formulario">
                             <div class="modal-header">
@@ -214,61 +209,155 @@
                                     <div class="col-md-12">
 
                                         <div class="col-md-12">
+                                            <input hidden type="text" class="form-control" id="metodo" name="metodo">
+                                            <input hidden type="text" class="form-control" name="estadosNew" id="estadosNew" value="${estadosHidden}">
 
-                                            <input style="display:none;" type="text" class="form-control" name="idCancha" id="idCancha">
-                                            <input style="display:none;" type="text" class="form-control" name="idHora" id="idHora">
+                                            <h5>Datos del contacto</h5>
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6">
+                                                    Cliente
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-user"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="cliente" name="cliente" autofocus="" placeholder="Nombre" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    DNI
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-id-card"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    Teléfono
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-phone"></i></div>    
+                                                        </div>
+                                                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <h5>Datos de la reserva</h5>
 
-                                            <div class="form-row mb-2">
-                                                <div class="col-md-12">
-                                                    <span><i class="fas fa-user"></i> Nombre</span>
-                                                    <input type="text"  class="form-control form-control-sm" name="cliente" id="cliente" autofocus="">
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6">
+                                                    Cancha
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-futbol"></i></div>
+                                                        </div>
+                                                        <select class="form-control js-example-basic-single" id="canchaModal" name="canchaModal">
+                                                            <c:forEach var="obj" items="${canchas}">
+                                                                <option value="${obj.id}">${obj.nombre} - <small>${obj.descripcion}</small></option>
+                                                            </c:forEach>
+                                                        </select>
+                                                    </div>
+                                                    <input hidden type="text" class="form-control" id="idCancha" name="idCancha">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    Fecha
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="date" class="form-control" id="fechaModal" name="fechaModal" value="${fecha}">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6">
+                                                    Hora inicio
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="time" class="form-control" id="horaInicio" name="horaInicio">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    Hora fin
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="time" class="form-control" id="horaFin" name="horaFin" data-toggle="tooltip" data-placement="top" title="Hora ocupada">
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="form-row mb-2">
-                                                <div class="col">
-                                                    <span><i class="fas fa-id-card"></i> DNI</span> 
-                                                    <input type="number"  class="form-control form-control-sm" name="dni" id="dni">  
+
+                                            <div class="row col-md-12">
+                                                <div class="col-md-4">
+                                                    Costo
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-money-bill"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="costo" name="costo" readonly="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    Descuento
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-arrow-circle-down"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="descuento" name="descuento">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    Total
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-money-check"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="total" name="total" readonly="">
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="form-row mb-2">
-                                                <div class="col-md-12">
-                                                    <span><i class="fas fa-phone"></i> Teléfono</span> 
-                                                    <input type="text"  class="form-control form-control-sm" name="telefono" id="telefono">
-                                                </div>
-                                            </div>
 
-                                            <div class="form-row mb-2">
-                                                <div class="col-md-12">
-                                                    <span><i class="fas fa-calendar"></i> Fecha</span> 
-                                                    <input type="date" class="form-control" name="fecha" id="fecha" value="${fecha}" readonly="">
+                                            <div class="row col-md-12">
+                                                <div class="col-md-4">
+                                                    Estado
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-list-ul"></i></div>
+                                                        </div>
+                                                        <select class="form-control js-example-basic-single" id="estado" name="estado">
+                                                            <c:forEach var="obj" items="${estadosModal}">
+                                                                <option value="${obj.id}">${obj.descripcion}</option>
+                                                            </c:forEach>
+                                                        </select>
+                                                        <input hidden type="text"  class="form-control" name="estadosNew" id="estadosNew" value="${estadosHidden}" readonly="">
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="form-row mb-2">
-                                                <div class="col-md-12">
-                                                    <span><i class="fas fa-clock"></i> Hora Inicio</span> 
-                                                    <input type="text" class="form-control" name="horaInicio" id="horaInicio" readonly="">
+                                                <div class="col-md-4">
+                                                    Pago
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-hand-holding-usd"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="pagado" name="pagado">
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="form-row mb-2">
-                                                <div class="col-md-12">
-                                                    <span><i class="fas fa-hand-holding-usd"></i> Tarifa</span> 
-                                                    <input type="text" class="form-control" name="tarifa" id="tarifa" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-row mb-2">
-                                                <div class="col-md-12">
-                                                    <span><i class="fas fa-hand-holding-usd"></i> Tarifa</span> 
-                                                    <select class="form-control js-example-basic-single" id="estado" name="estado">
-                                                        <c:forEach var="obj" items="${estadosModal}">
-                                                            <option value="${obj.id}">${obj.descripcion}</option>
-                                                        </c:forEach>
-                                                    </select>
-                                                    <input style="display: none;" type="text"  class="form-control" name="estadosNew" id="estadosNew" value="${estadosHidden}" readonly="">
+                                                <div class="col-md-4">
+                                                    Saldo
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-money-check"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="saldo" name="saldo" readonly="">
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -282,7 +371,7 @@
                                     <i class="fas fa-sign-out-alt"></i> Cerrar
                                 </button>
 
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id="reservarBtn" disabled="">
                                     <i class="fas fa-save"></i> Reservar
                                 </button>
 
@@ -312,10 +401,10 @@
                                         <div class="form-group">
                                             <div class="col-sm-12">
                                                 <label class="control-label">¿Seguro que desea eliminar la reserva del día: <b><label id="fechaDeleteLbl"></label></b> a las <b><label id="horaDeleteLbl"></label></b> ?</label>
-                                                <input style="display: none;" type="text" class="form-control" name="estadosDelete" id="estadosDelete" value="${estadosHidden}">
-                                                <input style="display: none;" type="text"  class="form-control" name="idCanchaDelete" id="idCanchaDelete">
-                                                <input style="display: none;" type="text"  class="form-control" name="idFechaDelete" id="idFechaDelete" value="${fecha}">
-                                                <input style="display: none;" type="text"  class="form-control" name="idHoraDelete" id="idHoraDelete">
+                                                <input hidden type="text" class="form-control" name="estadosDelete" id="estadosDelete" value="${estadosHidden}">
+                                                <input hidden type="text"  class="form-control" name="idCanchaDelete" id="idCanchaDelete">
+                                                <input hidden type="text"  class="form-control" name="idFechaDelete" id="idFechaDelete" value="${fecha}">
+                                                <input hidden type="text"  class="form-control" name="horaInicioDeleteLbl" id="horaInicioDeleteLbl">
                                             </div>
                                         </div>
                                     </div>
@@ -335,45 +424,30 @@
             </div><!-- /.Delete -->
 
 
-
-
         </div><!--/row-offcanvas -->
 
-        <!-- Styles -->
+
+
+        <!-- Scripts -->
         <jsp:include page="js/mainScripts.jsp" />
         <script src="js/adminScripts.js"></script>
 
         <!-- MENSAJES DE REGISTRO -->
-        <c:if test="${inserto eq true}">
-            <script>
-                            alertGrowl("Atención: Reserva <strong>registrada</strong>.", "success");
-            </script>
+        <c:choose>
+            <c:when test="${login eq 0}">
+                <c:if test="${inserted}">
+                    <script>
+                            alertGrowl("Atención: Registro <strong>exitoso</strong>.", "success");
+                    </script>
+                </c:if>
+                <c:if test="${not inserted}">
+                    <script>
+                        alertGrowl("Atención: Registro <strong>fallido</strong>.", "danger");
+                    </script>
+                </c:if>
+            </c:when>
+        </c:choose>
 
-        </c:if>
-        <c:if test="${inserto eq false}">
-            <script>
-                alertGrowl("Atención: Reserva <strong>NO</strong> registrada.", "warning");
-            </script>
-        </c:if>
-
-        <!-- MENSAJES DE REGISTRO -->
-        <c:if test="${respuesta eq 1}">
-            <script>
-                alertGrowl("Atención: Reserva <strong>registrada</strong>.", "success");
-            </script>
-
-        </c:if>
-        <c:if test="${respuesta eq 2}">
-            <script>
-                alertGrowl("Atención: Reserva <strong>actualizada</strong>.", "warning");
-            </script>
-
-        </c:if>
-        <c:if test="${respuesta eq 0}">
-            <script>
-                alertGrowl("Atención: Reserva <strong>NO</strong> registrada.", "danger");
-            </script>
-        </c:if>
     </body>
 </html>
 <%    }

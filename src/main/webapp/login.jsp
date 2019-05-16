@@ -39,7 +39,7 @@
             <button class="btn btn-lg btn-success btn-block" type="submit">
                 <span class="fas fa-sign-in-alt"></span> Ingresar
             </button>
-            <a class="btn btn-lg btn-info btn-block" href="CanchaPick">
+            <a class="btn btn-lg btn-info btn-block" href="ReservaForm2">
                 <span class="fas fa-arrow-left"></span> Regresar
             </a>
             <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>

@@ -15,7 +15,7 @@
         <%@ page contentType="text/html"%>
         <%@ page import = "javax.servlet.RequestDispatcher" %>
         <%
-            RequestDispatcher rd = request.getRequestDispatcher("/CanchaPick");
+            RequestDispatcher rd = request.getRequestDispatcher("/ReservaForm2");
             request.setAttribute("msg", "HI Welcome");
             rd.forward(request, response);
         %>

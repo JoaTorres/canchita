@@ -83,6 +83,19 @@
                             <span class="text-muted">S/ 90</span>
                         </li>
                     </ul>
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Eventos</span>
+                        <span class="badge badge-secondary badge-pill"><span class="fas fa-gift"></span></span>
+                    </h4>
+                    <ul class="list-group mb-3">
+
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">Contactar con: </h6>
+                            </div>
+                            <span class="text-muted">960186739</span>
+                        </li>
+                    </ul>
 
                 </div>
                 <div class="col-md-8 order-md-1">

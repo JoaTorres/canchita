@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.ReservaTO;
@@ -17,29 +12,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "HorarioPick", urlPatterns = {"/HorarioPick"})
 public class HorarioPick extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */        
-           
-            
+                        
             int canchaId = Integer.parseInt(request.getParameter("canchaId"));
             request.setAttribute("canchaId", canchaId);
             
@@ -71,8 +52,6 @@ public class HorarioPick extends HttpServlet {
             request.setAttribute("diaNombre2", diaNombre2);
             String diaNombre3 = nombresDias.get(2);
             request.setAttribute("diaNombre3", diaNombre3);
-                    
-                    
             
             
             HorarioDAO objDAO = new HorarioDAO();
@@ -81,10 +60,7 @@ public class HorarioPick extends HttpServlet {
             List<ReservaTO> reservas2 = objDAO.list(canchaId, dias.get(1));
             request.setAttribute("reservas2", reservas2);
             List<ReservaTO> reservas3 = objDAO.list(canchaId, dias.get(2));
-            request.setAttribute("reservas3", reservas3);
-            
-            
-            
+            request.setAttribute("reservas3", reservas3);              
             
             
             

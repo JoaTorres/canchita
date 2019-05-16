@@ -11,6 +11,7 @@ public class DatabaseConnection {
     
     //CONEXIÓN BD-PRODUCCIÓN REMOTA SERVIDOR SQL
     static String url = "jdbc:sqlserver://SQL2:1433;databaseName=Soccer;";
+//    static String url = "jdbc:sqlserver://localhost:1433;databaseName=Soccer;";
     static String database = "Soccer;";
     static String user = "sa;";
     static String password = "##cbaCBA123##";

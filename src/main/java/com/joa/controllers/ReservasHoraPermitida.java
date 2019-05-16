@@ -1,68 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
-import com.joa.classes.HorarioTO;
-import com.joa.dao.HorarioDAO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.joa.dao.ReservaDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
-@WebServlet(name = "HorarioNew", urlPatterns = {"/HorarioNew"})
-public class HorarioNew extends HttpServlet {
+@WebServlet(name = "ReservasHoraPermitida", urlPatterns = {"/ReservasHoraPermitida"})
+public class ReservasHoraPermitida extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
-            HorarioDAO objDAO = new HorarioDAO();
-            
-            int id = request.getParameter("id") == null ? 0 :  Integer.parseInt(request.getParameter("id"));
+            int idCancha = Integer.parseInt(request.getParameter("idCancha"));
+            String fecha = request.getParameter("fecha");
             String horaInicio = request.getParameter("horaInicio");
             String horaFin = request.getParameter("horaFin");
-            double tarifa = request.getParameter("tarifa") == null ? 0.0 : Double.parseDouble(request.getParameter("tarifa"));
             
-            HorarioTO objTO = new HorarioTO();
-            objTO.setId(id);
-            objTO.setHoraInicio(horaInicio);
-            objTO.setHoraFin(horaFin);
-            objTO.setTarifa(tarifa);
-            
-            int respuesta = objDAO.update(objTO);
-            request.setAttribute("respuesta", respuesta);
-            
-            //RETORNAR LA LISTA
-            List<HorarioTO> list = objDAO.list();
-            request.setAttribute("list", list);
-            
-            
-            getServletConfig().getServletContext().getRequestDispatcher("/horarioList.jsp").forward(request, response);
+            ReservaDAO objB = new ReservaDAO();
+            boolean horaPermitida = objB.horaPermitida(idCancha, fecha, horaInicio, horaFin);
 
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            String json = ow.writeValueAsString(horaPermitida);
+
+            response.getWriter().write(json);
         } catch (Exception e) {
-            System.out.println("ERROR @HorarioNew: " + e);
+            System.out.println("ERROR @ReservasGetLista: " + e);
         }
     }
 

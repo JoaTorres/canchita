@@ -21,9 +21,9 @@
                 <a class="nav-link" href="CanchaList"><span class="fas fa-futbol"></span> Canchas</a>
             </li>
 
-            <li class="nav-item">
+<!--            <li class="nav-item">
                 <a class="nav-link" href="HorarioList"><span class="fas fa-clock"></span> Horarios</a>
-            </li>
+            </li>-->
 
         </ul>
 

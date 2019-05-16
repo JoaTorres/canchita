@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,10 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "ReservaGetOne", urlPatterns = {"/ReservaGetOne"})
 public class ReservaGetOne extends HttpServlet {
 
@@ -27,13 +18,13 @@ public class ReservaGetOne extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
             String fecha = request.getParameter("fecha");
             int idCancha = Integer.parseInt(request.getParameter("idCancha"));
-            int idHora = Integer.parseInt(request.getParameter("idHora"));
+            System.out.println("idCancha: "+idCancha);
+            String horaInicio = request.getParameter("horaInicio");
             
             ReservaDAO reservaDAO = new ReservaDAO();
-            ReservaTO obj = reservaDAO.getOne(fecha, idCancha, idHora);
+            ReservaTO obj = reservaDAO.getOne2(fecha, idCancha, horaInicio);
             
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String json = ow.writeValueAsString(obj);

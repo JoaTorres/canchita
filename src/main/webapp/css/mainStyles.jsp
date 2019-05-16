@@ -11,3 +11,6 @@
 
 <!-- LOADING -->
 <link rel="stylesheet" href="css/loadingIcon.css">
+
+<!-- INPUT NO ARROWS -->
+<link rel="stylesheet" href="css/inputDateNoArrows.css">

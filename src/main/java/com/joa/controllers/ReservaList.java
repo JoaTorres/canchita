@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
@@ -20,27 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "ReservaList", urlPatterns = {"/ReservaList"})
 public class ReservaList extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
             CanchaDAO canchaDAO = new CanchaDAO();
             ReservaDAO reservaDAO = new ReservaDAO();
             
@@ -57,7 +39,7 @@ public class ReservaList extends HttpServlet {
             String idsCanchas = "";
             
             for (CanchaTO cancha : canchas) {
-                cancha.setReservas(reservaDAO.list(cancha.getId(), fecha));                
+                cancha.setReservas(reservaDAO.list2(cancha.getId(), fecha));                
                 idsCanchas += cancha.getId() +",";
             }
             idsCanchas = StringUtils.deleteLastChar(idsCanchas);
@@ -68,10 +50,6 @@ public class ReservaList extends HttpServlet {
             SelectDAO selectDAO = new SelectDAO();
             List<SelectTO> estados = selectDAO.list("reservasEstados");
             
-            SelectTO selectLibre = new SelectTO();
-            selectLibre.setId(0);
-            selectLibre.setDescripcion("Libre");
-            estados.add(0, selectLibre);
             
             if(estadosHidden == null){
                 estadosHidden = "";
@@ -91,6 +69,11 @@ public class ReservaList extends HttpServlet {
             }
             request.setAttribute("estados", estados);
             
+            List<SelectTO> estadosModal = selectDAO.list("reservasEstados");
+            request.setAttribute("estadosModal", estadosModal);
+            request.setAttribute("estadosHidden", estadosHidden);
+            request.setAttribute("estadosNew", estadosHidden);
+            request.setAttribute("estadosExcel", estadosHidden);
 
             getServletConfig().getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
             

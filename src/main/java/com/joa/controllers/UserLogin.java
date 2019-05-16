@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
@@ -16,7 +11,6 @@ import com.joa.dao.UserDAO;
 import com.joa.utils.DateUtils;
 import com.joa.utils.StringUtils;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,27 +18,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "UserLogin", urlPatterns = {"/UserLogin"})
 public class UserLogin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
             UserDAO userDAO = new UserDAO();
             CanchaDAO canchaDAO = new CanchaDAO();
             ReservaDAO reservaDAO = new ReservaDAO();
@@ -68,7 +49,7 @@ public class UserLogin extends HttpServlet {
             String idsCanchas = "";
             
             for (CanchaTO cancha : canchas) {
-                cancha.setReservas(reservaDAO.list(cancha.getId(), fecha));                
+                cancha.setReservas(reservaDAO.list2(cancha.getId(), fecha));                
                 idsCanchas += cancha.getId() +",";
             }
             idsCanchas = StringUtils.deleteLastChar(idsCanchas);
@@ -80,10 +61,6 @@ public class UserLogin extends HttpServlet {
             SelectDAO selectDAO = new SelectDAO();
             List<SelectTO> estados = selectDAO.list("reservasEstados");
             
-            SelectTO selectLibre = new SelectTO();
-            selectLibre.setId(0);
-            selectLibre.setDescripcion("Libre");
-            estados.add(0, selectLibre);
             
             if(estadosHidden == null){
                 estadosHidden = "";

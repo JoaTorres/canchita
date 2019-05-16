@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
@@ -16,29 +11,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author developer
- */
 @WebServlet(name = "CanchaPick", urlPatterns = {"/CanchaPick"})
 public class CanchaPick extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try {
-            /* TODO output your page here. You may use following sample code. */
             CanchaDAO objDAO = new CanchaDAO();
             List<CanchaTO> canchas = objDAO.list();
             request.setAttribute("canchas", canchas);
             request.setAttribute("canchasSize", canchas.size());
             
             String today = DateUtils.localDateToFullString(DateUtils.getToday());
-            request.setAttribute("today", today);
+            request.setAttribute("today", today);            
             
-            
-            getServletConfig().getServletContext().getRequestDispatcher("/canchaPick.jsp").forward(request, response);
-            
+            getServletConfig().getServletContext().getRequestDispatcher("/canchaPick.jsp").forward(request, response);            
         } catch (Exception e) {
             System.out.println("ERROR @CanchasGetList: " + e);
         }
