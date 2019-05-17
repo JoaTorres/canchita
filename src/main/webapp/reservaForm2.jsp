@@ -10,8 +10,7 @@
         <title>Alfa City Sport</title>
         <link rel="icon" href="img/icon2.png">
 
-        <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/checkout/">
-
+    
         <!-- Bootstrap core CSS -->
         <jsp:include page="css/mainStyles.jsp" />
 
@@ -227,6 +226,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="row">
+                                             
                                                 <div class="col-md-4">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
@@ -244,12 +244,13 @@
                                                         <input type="time" class="form-control text-right" id="horaFinModal" name="horaFinModal">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-4" id="loading">
                                                     <button type="button" class="btn-block btn btn-info" data-dismiss="modal" id="seleccionarBtn" disabled="">
                                                         <i class="fas fa-check"></i> Seleccionar
                                                     </button>
                                                 </div>
                                             </div>
+                                             
                                         </div>
                                     </div>
                                 </div>
