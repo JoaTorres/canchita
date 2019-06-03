@@ -137,7 +137,7 @@ function verificarHorario(){
         var horaFin = $("#horaFinModal").val();
 
         let bandera=0;
-        let html=`<button type="button" class="btn-block btn btn-info" data-dismiss="modal" id="seleccionarBtn" disabled="">
+        let html=`<button type="button" class="btn-block btn btn-info" data-dismiss="modal" id="seleccionarBtn">
                                                         <i class="fas fa-check"></i> Seleccionar
                                                     </button>`;
         
