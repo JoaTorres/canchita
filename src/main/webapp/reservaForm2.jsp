@@ -69,6 +69,8 @@
                     </c:if>
                 </c:when>
             </c:choose>
+                        
+                        <div class="row"></div>
 
             <div class="row">
                 <div class="col-md-4 order-md-2 mb-4">
