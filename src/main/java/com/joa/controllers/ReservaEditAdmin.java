@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
@@ -8,6 +13,7 @@ import com.joa.dao.ReservaDAO;
 import com.joa.dao.SelectDAO;
 import com.joa.utils.StringUtils;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,8 +21,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "ReservaNewAdmin", urlPatterns = {"/ReservaNewAdmin"})
-public class ReservaNewAdmin extends HttpServlet {
+/**
+ *
+ * @author developer
+ */
+@WebServlet(name = "ReservaEditAdmin", urlPatterns = {"/ReservaEditAdmin"})
+public class ReservaEditAdmin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -27,22 +37,22 @@ public class ReservaNewAdmin extends HttpServlet {
             ReservaDAO reservaDAO = new ReservaDAO();
             CanchaDAO canchaDAO = new CanchaDAO();
 
-            String cliente = request.getParameter("clienteNew");
-            String dni = request.getParameter("dniNew");
-            String telefono = request.getParameter("telefonoNew");
+            String cliente = request.getParameter("clienteEdit");
+            String dni = request.getParameter("dniEdit");
+            String telefono = request.getParameter("telefonoEdit");
 
-            int idCancha = Integer.parseInt(request.getParameter("canchaNew"));
-            String fecha = request.getParameter("fechaNew");
-            String horaInicio = request.getParameter("horaInicioNew");
-            String horaFin = request.getParameter("horaFinNew");
+            int idCancha = Integer.parseInt(request.getParameter("canchaEdit"));
+            String fecha = request.getParameter("fechaEdit");
+            String horaInicio = request.getParameter("horaInicioEdit");
+            String horaFin = request.getParameter("horaFinEdit");
 
-            double costo = Double.parseDouble(request.getParameter("costoNew"));
-            double descuento = Double.parseDouble(request.getParameter("descuentoNew"));
-            double total = Double.parseDouble(request.getParameter("totalNew"));
-            double pagado = Double.parseDouble(request.getParameter("pagadoNew"));
-            double saldo = Double.parseDouble(request.getParameter("saldoNew"));
+            double costo = Double.parseDouble(request.getParameter("costoEdit"));
+            double descuento = Double.parseDouble(request.getParameter("descuentoEdit"));
+            double total = Double.parseDouble(request.getParameter("totalEdit"));
+            double pagado = Double.parseDouble(request.getParameter("pagadoEdit"));
+            double saldo = Double.parseDouble(request.getParameter("saldoEdit"));
 
-            int idEstado = Integer.parseInt(request.getParameter("estadoNew"));
+            int idEstado = Integer.parseInt(request.getParameter("estadoEdit"));
 
             ReservaTO obj = new ReservaTO();
             obj.setCliente(cliente);
@@ -62,7 +72,7 @@ public class ReservaNewAdmin extends HttpServlet {
 
             obj.setIdEstado(idEstado);
 
-            int respuesta = reservaDAO.insertFormAdmin(obj);
+            int respuesta = reservaDAO.updateFormAdmin(obj);
             request.setAttribute("respuesta", respuesta);
 
             //RETORNAR LA LISTA
@@ -81,7 +91,7 @@ public class ReservaNewAdmin extends HttpServlet {
             request.setAttribute("idsCanchas", idsCanchas);
 
             //ESTADOS
-            String estadosHidden = request.getParameter("estadosNew");
+            String estadosHidden = request.getParameter("estadosEdit");
             SelectDAO selectDAO = new SelectDAO();
             List<SelectTO> estados = selectDAO.list("reservasEstados");
 
@@ -118,7 +128,7 @@ public class ReservaNewAdmin extends HttpServlet {
             getServletConfig().getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("ERROR @ReservaNewAdmin: " + e);
+            System.out.println("ERROR @ReservaEditAdmin: " + e);
         }
     }
 

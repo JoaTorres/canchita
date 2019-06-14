@@ -21,31 +21,73 @@ $(document).ready(function () {
             type: 'POST',
             data: {idCancha: idCancha, fecha: fecha},
             dataType: 'json',
+            beforeSend: function () {
+                $(".se-pre-con").fadeIn("fast");
+            },
             success: function (list) {
                 if (list.length > 0) {
                     for (var e in list) {
                         addRow('reservasTable', list[e]);
                     }
                 }
+                $(".se-pre-con").fadeOut("slow");
             }
         });
     });
 
     $("#horaInicioModal").keyup(() => {
-      verificarHorario();
+        verificarHorario();
     });
-  
+
     $("#horaFinModal").keyup(() => {
         verificarHorario();
-            });
+    });
 
     $("#horaInicioModal").on('change', () => {
-       verificarHorario();
+        verificarHorario();
     });
 
     $("#horaFinModal").on('change', () => {
-       verificarHorario();
+        verificarHorario();
     });
+
+    function verificarHorario() {
+        var idCancha = $("#canchas").val();
+        var fecha = $("#fecha").val();
+        var horaInicio = $("#horaInicioModal").val();
+        var horaFin = $("#horaFinModal").val();
+
+
+        if (horaInicio.length == 5 && horaFin.length == 5) {
+
+            $.ajax({
+                url: "ReservasHoraPermitida",
+                type: 'POST',
+                data: {idCancha: idCancha, fecha: fecha, horaInicio: horaInicio, horaFin: horaFin},
+                dataType: 'json',
+                beforeSend: function () {
+                    console.log('meow');
+                    $("#seleccionarBtn").attr('disabled', true);
+//                        $(".se-pre-con").fadeIn("slow");
+                },
+                success: function (horaPermitida) {
+
+                    if (horaPermitida == true) {
+                        $("#seleccionarBtn").removeAttr('disabled');
+                    } else {
+                        $("#seleccionarBtn").attr('disabled', true);
+                    }
+//                        $(".se-pre-con").fadeOut("slow");
+                }
+
+            });
+
+        } else {
+            $("#seleccionarBtn").attr('disabled', true);
+        }
+
+    }
+
 
     $("#seleccionarBtn").on('click', () => {
         var horaInicio = $("#horaInicioModal").val();
@@ -130,44 +172,3 @@ function resetTabe(tableID) {
     $("#" + tableID).find("tr:gt(1)").remove();
 }
 
-function verificarHorario(){
-    var idCancha = $("#canchas").val();
-        var fecha = $("#fecha").val();
-        var horaInicio = $("#horaInicioModal").val();
-        var horaFin = $("#horaFinModal").val();
-
-        let bandera=0;
-        let html=`<button type="button" class="btn-block btn btn-info" data-dismiss="modal" id="seleccionarBtn">
-                                                        <i class="fas fa-check"></i> Seleccionar
-                                                    </button>`;
-        
-        if (horaInicio.length >= 5 && horaFin.length >= 5) {
-            if(bandera<1){
-                bandera++;
-             $.ajax({
-                url: "ReservasHoraPermitida",
-                type: 'POST',
-                data: {idCancha: idCancha, fecha: fecha, horaInicio: horaInicio, horaFin: horaFin},
-                dataType: 'json',
-                 beforeSend: function () {
-                  
-                    document.querySelector('#loading').innerHTML="<img src='img/loading.gif' height='38' width='42'> cargando...";
-                },
-                success: function (horaPermitida) {
-                    if (horaPermitida == true) {
-                        $("#seleccionarBtn").removeAttr('disabled');
-                    } else {
-                        $("#seleccionarBtn").attr('disabled', true);
-                    }
-                      console.log("TERMINADO-KEYUP-HORAFINAL");
-                      bandera=0;
-                   document.querySelector('#loading').innerHTML=html;
-                }
-            });   
-            }
-            
-        } else {
-            $("#seleccionarBtn").attr('disabled', true);
-        }
-
-}

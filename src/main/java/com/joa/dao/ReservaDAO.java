@@ -551,7 +551,8 @@ public class ReservaDAO {
     }
 
     public ReservaTO getOne2(String fecha, int idCancha, String horaInicio) throws Exception {
-        String query = "SELECT * FROM reservas2 "
+        String query = "SELECT * FROM reservas2 r "
+                + "inner join canchas c on r.idCancha = c.id "
                 + "WHERE idCancha = " + idCancha + " "
                 + "AND fecha = \'" + fecha + "\' "
                 + "AND horaInicio = \'" + horaInicio + "\'; ";
@@ -564,6 +565,7 @@ public class ReservaDAO {
             if (rs.next()) {
                 obj = new ReservaTO();
                 obj.setIdCancha(idCancha);
+                obj.setCancha(rs.getString("nombre"));
                 obj.setFecha(fecha);
                 obj.setHoraInicio(rs.getString("horaInicio"));
                 obj.setHoraFin(rs.getString("horaFin"));

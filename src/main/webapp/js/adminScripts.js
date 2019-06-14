@@ -25,11 +25,11 @@ $(document).ready(function () {
 
     //EDITAR RESERVA
     $('.btnClicked').click(function () {
-        $("#reservarBtn").removeAttr('disabled');
-        $("#metodo").val("EDITAR");
-        $("#horaInicio").attr('readonly', true);
-        $("#canchaModal").attr('disabled', true);
-        $("#fechaModal").attr('readonly', true);
+        $("#reservarBtnEdit").removeAttr('disabled');
+        $("#horaInicioEdit").attr('readonly', true);
+        $("#canchaLabelEdit").attr('readonly', true);
+        $("#canchaEdit").attr('readonly', true);
+        $("#fechaEdit").attr('readonly', true);
 
         var idCancha = $(this).attr('idCancha');
         var horaInicio = $(this).attr('horaInicio');
@@ -40,22 +40,23 @@ $(document).ready(function () {
             data: {fecha: fecha, idCancha: idCancha, horaInicio: horaInicio},
             dataType: 'json',
             success: function (data) {
-                $("#canchaModal").val(data.idCancha).trigger('change');
-                $("#idCancha").val(data.idCancha);
-                $("#fecha").val(data.fecha);
-                $("#horaInicio").val(data.horaInicio);
-                $("#horaFin").val(data.horaFin);
-                $("#costo").val(data.costo);
-                $("#descuento").val(data.descuento);
-                $("#total").val(data.total);
-                $("#estado").val(data.idEstado).trigger('change');
-                $("#pagado").val(data.pagado);
-                $("#saldo").val(data.saldo);
-                $("#cliente").val(data.cliente);
-                $("#dni").val(data.dni);
-                $("#telefono").val(data.telefono);
-                
-                calcMontos();
+                $("#canchaLabelEdit").val(data.cancha);
+                $("#canchaEdit").val(data.idCancha);
+//                $("#idCancha").val(data.idCancha);
+                $("#fechaEdit").val(data.fecha);
+                $("#horaInicioEdit").val(data.horaInicio);
+                $("#horaFinEdit").val(data.horaFin);
+                $("#costoEdit").val(data.costo);
+                $("#descuentoEdit").val(data.descuento);
+                $("#totalEdit").val(data.total);
+                $("#estadoEdit").val(data.idEstado).trigger('change');
+                $("#pagadoEdit").val(data.pagado);
+                $("#saldoEdit").val(data.saldo);
+                $("#clienteEdit").val(data.cliente);
+                $("#dniEdit").val(data.dni);
+                $("#telefonoEdit").val(data.telefono);
+
+                calcMontos("Edit");
             }
         });
 
@@ -63,26 +64,25 @@ $(document).ready(function () {
 
     //NUEVA RESERVA
     $('#nuevaReservaBtn').click(() => {
-        $("#metodo").val("NUEVO");
-        $("#horaInicio").removeAttr('readonly');
-        $("#canchaModal").removeAttr('disabled');
-        $("#fechaModal").removeAttr('readonly');
+        $("#horaInicioNew").removeAttr('readonly');
+        $("#canchaNew").removeAttr('disabled');
+        $("#fechaNew").removeAttr('readonly');
 
-        $("#canchaModal").val(1).trigger('change');
-        $("#idCancha").val(1);
-        $("#fecha").val(fecha);
+        $("#canchaNew").val(1).trigger('change');
+//        $("#idCanchaNew").val(1);
+        $("#fechaNew").val(fecha);
 
-        $("#horaInicio").val('');
-        $("#horaFin").val('');
-        $("#costo").val(0);
-        $("#descuento").val(0);
-        $("#total").val(0);
-        $("#estado").val(1).trigger('change');
-        $("#pagado").val(0);
-        $("#saldo").val(0);
-        $("#cliente").val('');
-        $("#dni").val('');
-        $("#telefono").val('');
+        $("#horaInicioNew").val('');
+        $("#horaFinNew").val('');
+        $("#costoNew").val(0);
+        $("#descuentoNew").val(0);
+        $("#totalNew").val(0);
+        $("#estadoNew").val(1).trigger('change');
+        $("#pagadoNew").val(0);
+        $("#saldoNew").val(0);
+        $("#clienteNew").val('');
+        $("#dniNew").val('');
+        $("#telefonoNew").val('');
     });
 
     //ELIMINAR RESERVA
@@ -102,146 +102,44 @@ $(document).ready(function () {
 
 
     //CAMBIO DE HORA INICIAL
-    $("#horaInicio").keyup(() => {
-        var idCancha = $("#idCancha").val();
-        var fecha = $("#fecha").val();
-        var horaInicio = $("#horaInicio").val();
-        var horaFin = $("#horaFin").val();
+    $("#horaInicioNew").keyup(() => {
+        verificarHorario("New");
+    });
 
-        var metodo = $("#metodo").val();
-
-        if (metodo == 'NUEVO') {
-            if (horaInicio.length == 5 && horaFin.length == 5) {
-                $.ajax({
-                    url: "ReservasHoraPermitida",
-                    type: 'POST',
-                    data: {idCancha: idCancha, fecha: fecha, horaInicio: horaInicio, horaFin: horaFin},
-                    dataType: 'json',
-                    success: function (horaPermitida) {
-                        if (horaPermitida == true) {
-                            $("#reservarBtn").removeAttr('disabled');
-                            $('#horaFin').tooltip('disable');
-                            $('#horaFin').tooltip('hide');
-
-                            $.ajax({
-                                url: "ReservasCalculoCosto",
-                                type: 'POST',
-                                data: {horaInicio: horaInicio, horaFin: horaFin},
-                                dataType: 'json',
-                                success: function (costo) {
-                                    $("#costo").val(costo);
-                                    calcMontos();
-                                }
-                            });
-                        } else {
-                            $("#reservarBtn").attr('disabled', true);
-                            $('#horaFin').tooltip('enable');
-                            $('#horaFin').tooltip('show');
-                            $("#costo").val(0);
-                            calcMontos();
-                        }
-                    }
-                });
-            } else {
-                $("#reservarBtn").attr('disabled', true);
-                $("#costo").val(0);
-                calcMontos();
-            }
-        } else {
-            var horaInicio = $("#horaInicio").val();
-            var horaFin = $("#horaFin").val();
-
-            if (horaInicio.length == 5 && horaFin.length == 5) {
-                $.ajax({
-                    url: "ReservasCalculoCosto",
-                    type: 'POST',
-                    data: {horaInicio: horaInicio, horaFin: horaFin},
-                    dataType: 'json',
-                    success: function (costo) {
-                        $("#costo").val(costo);
-                        calcMontos();
-                    }
-                });
-            } else {
-                $("#costo").val(0);
-                calcMontos();
-            }
-        }
-
+    $("#horaInicioNew").on('change', () => {
+        verificarHorario("New");
     });
 
     //CAMBIO DE HORA FINAL
-    $("#horaFin").keyup(() => {
-        var idCancha = $("#canchaModal").val();
-        var fecha = $("#fecha").val();
-        var horaInicio = $("#horaInicio").val();
-        var horaFin = $("#horaFin").val();
-
-        var metodo = $("#metodo").val();
-
-        if (metodo == 'NUEVO') {
-            if (horaInicio.length == 5 && horaFin.length == 5) {
-                $.ajax({
-                    url: "ReservasHoraPermitida",
-                    type: 'POST',
-                    data: {idCancha: idCancha, fecha: fecha, horaInicio: horaInicio, horaFin: horaFin},
-                    dataType: 'json',
-                    success: function (horaPermitida) {
-                        if (horaPermitida == true) {
-                            $("#reservarBtn").removeAttr('disabled');
-                            $('#horaFin').tooltip('disable');
-                            $('#horaFin').tooltip('hide');
-
-                            $.ajax({
-                                url: "ReservasCalculoCosto",
-                                type: 'POST',
-                                data: {horaInicio: horaInicio, horaFin: horaFin},
-                                dataType: 'json',
-                                success: function (costo) {
-                                    $("#costo").val(costo);
-                                    
-                                    calcMontos();
-                                }
-                            });
-
-                        } else {
-                            $("#reservarBtn").attr('disabled', true);
-                            $('#horaFin').tooltip('enable');
-                            $('#horaFin').tooltip('show');
-
-                            $("#costo").val(0);
-                            calcMontos();
-                        }
-                    }
-                });
-            } else {
-                $("#reservarBtn").attr('disabled', true);
-                $("#costo").val(0);
-                calcMontos();
-            }
-        } else {
-            var horaInicio = $("#horaInicio").val();
-            var horaFin = $("#horaFin").val();
-
-            if (horaInicio.length == 5 && horaFin.length == 5) {
-                $.ajax({
-                    url: "ReservasCalculoCosto",
-                    type: 'POST',
-                    data: {horaInicio: horaInicio, horaFin: horaFin},
-                    dataType: 'json',
-                    success: function (costo) {
-                        $("#costo").val(costo);
-                        calcMontos();
-                    }
-                });
-
-            } else {
-                $("#costo").val(0);
-                calcMontos();
-            }
-        }
-
+    $("#horaFinNew").keyup(() => {
+        verificarHorario("New");
     });
+
+    $("#horaFinNew").on('change', () => {
+        verificarHorario("New");
+    });
+
+
+
+    //CAMBIO DE HORA INICIAL
+    $("#horaInicioEdit").keyup(() => {
+        verificarHorario("Edit");
+    });
+
+    $("#horaInicioEdit").on('change', () => {
+        verificarHorario("Edit");
+    });
+
+    //CAMBIO DE HORA FINAL
+    $("#horaFinEdit").keyup(() => {
+        verificarHorario("Edit");
+    });
+
+    $("#horaFinEdit").on('change', () => {
+        verificarHorario("Edit");
+    });
+
+
 
 
 
@@ -259,34 +157,110 @@ $(document).ready(function () {
             tables[i].draw();
         }
     });
-    
+
     //CHANGE CANCHA
-    $('#canchaModal').change(function () {
-        var idCancha = $('#canchaModal').val();
-        $("#idCancha").val(idCancha);
-    });
-    
+//    $('#canchaModal').change(function () {
+//        var idCancha = $('#canchaModal').val();
+//        $("#idCancha").val(idCancha);
+//    });
+
     //KEYUP MONTOS    
-    $('#descuento').keyup(() => {
-        calcMontos();
+    $('#descuentoNew').keyup(() => {
+        calcMontos("New");
     });
-    $('#pagado').keyup(() => {
-        calcMontos();
+    $('#pagadoNew').keyup(() => {
+        calcMontos("New");
+    });
+
+    $('#descuentoEdit').keyup(() => {
+        calcMontos("Edit");
+    });
+    $('#pagadoEdit').keyup(() => {
+        calcMontos("Edit");
     });
 
 });
 
-function calcMontos(){
-    var costo = $("#costo").val() === '' || isNaN($("#costo").val()) ? 0 : parseFloat($("#costo").val());
-    var descuento = $("#descuento").val() === '' || isNaN($("#descuento").val()) ? 0 : parseFloat($("#descuento").val());
-    
+function verificarHorario(sufix) {
+    var idCancha = $("#cancha" + sufix).val();
+    var fecha = $("#fecha" + sufix).val();
+    var horaInicio = $("#horaInicio" + sufix).val();
+    var horaFin = $("#horaFin" + sufix).val();
+
+
+    //if sufix 
+    if (sufix == 'New') {
+
+        if (horaInicio.length == 5 && horaFin.length == 5) {
+
+            $.ajax({
+                url: "ReservasHoraPermitida",
+                type: 'POST',
+                data: {idCancha: idCancha, fecha: fecha, horaInicio: horaInicio, horaFin: horaFin},
+                dataType: 'json',
+                success: function (horaPermitida) {
+                    if (horaPermitida == true) {
+                        $("#reservarBtn" + sufix).removeAttr('disabled');
+                        $("#horaFin" + sufix).tooltip('disable');
+                        $("#horaFin" + sufix).tooltip('hide');
+
+                        $.ajax({
+                            url: "ReservasCalculoCosto",
+                            type: 'POST',
+                            data: {horaInicio: horaInicio, horaFin: horaFin},
+                            dataType: 'json',
+                            success: function (costo) {
+                                $("#costo" + sufix).val(costo);
+
+                                calcMontos(sufix);
+                            }
+                        });
+
+                    } else {
+                        $("#reservarBtn" + sufix).attr('disabled', true);
+                        $("#horaFin" + sufix).tooltip('enable');
+                        $("#horaFin" + sufix).tooltip('show');
+
+                        $("#costo" + sufix).val(0);
+                        calcMontos(sufix);
+                    }
+                }
+            });
+
+        }
+    } else {
+        console.log('xd');
+        $("#reservarBtn" + sufix).removeAttr('disabled');
+        $("#horaFin" + sufix).tooltip('disable');
+        $("#horaFin" + sufix).tooltip('hide');
+
+        $.ajax({
+            url: "ReservasCalculoCosto",
+            type: 'POST',
+            data: {horaInicio: horaInicio, horaFin: horaFin},
+            dataType: 'json',
+            success: function (costo) {
+                $("#costo" + sufix).val(costo);
+
+                calcMontos(sufix);
+            }
+        });
+    }
+
+
+}
+
+function calcMontos(sufix) {
+    var costo = $("#costo" + sufix).val() === '' || isNaN($("#costo" + sufix).val()) ? 0 : parseFloat($("#costo" + sufix).val());
+    var descuento = $("#descuento" + sufix).val() === '' || isNaN($("#descuento" + sufix).val()) ? 0 : parseFloat($("#descuento" + sufix).val());
+
     var total = costo - descuento;
-    $("#total").val(total);
-    
-    var pagado = $("#pagado").val() === '' || isNaN($("#pagado").val()) ? 0 : parseFloat($("#pagado").val());
-    
+    $("#total" + sufix).val(total);
+
+    var pagado = $("#pagado" + sufix).val() === '' || isNaN($("#pagado" + sufix).val()) ? 0 : parseFloat($("#pagado" + sufix).val());
+
     var saldo = total - pagado;
-    $("#saldo").val(saldo);
+    $("#saldo" + sufix).val(saldo);
 }
 
 function resetVars() {

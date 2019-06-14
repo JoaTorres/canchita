@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <!--<a class="navbar-brand" href="admin.jsp" style="padding-top: 0px;">Reservas-->
     <!--        <img height="35px" style="text-decoration:none;" alt="Brand" src="">-->
     <!--</a>-->

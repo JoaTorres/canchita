@@ -38,7 +38,9 @@
 
     </head>
     <body class="bg-light">
-
+        
+        <!-- LOADING -->
+        <div class="se-pre-con"></div>
 
 
         <div class="container">

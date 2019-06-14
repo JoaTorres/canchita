@@ -5,6 +5,8 @@
  */
 package com.joa.classes;
 
+import java.util.List;
+
 /**
  *
  * @author developer
@@ -13,9 +15,19 @@ public class UserTO {
     private String usuario;
     private String clave;
     private String nombre;
+    private List<Permiso> permisos;
 
     public UserTO() {
     }
+
+    public List<Permiso> getPermisos() {
+        return permisos;
+    }
+
+    public void setPermisos(List<Permiso> permisos) {
+        this.permisos = permisos;
+    }
+    
 
     public String getUsuario() {
         return usuario;

@@ -21,5 +21,6 @@
 <script src="js/alertNotifications.js"></script>
 
 <!-- LOADING -->
+<link rel="stylesheet" href="css/loadingIcon.css">
 <script src="js/modernizr.js"></script>
 <script src="js/loadingIcon.js"></script>

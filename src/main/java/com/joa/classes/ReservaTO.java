@@ -12,6 +12,7 @@ public class ReservaTO {
     private String estado;
 
     private int idCancha;
+    private String cancha;
     private String fecha;
     private String cliente;
     private String dni;
@@ -29,6 +30,16 @@ public class ReservaTO {
 
     public ReservaTO() {
     }
+
+    public String getCancha() {
+        return cancha;
+    }
+
+    public void setCancha(String cancha) {
+        this.cancha = cancha;
+    }
+    
+    
 
     public double getDescuento() {
         return descuento;

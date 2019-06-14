@@ -70,10 +70,21 @@
                     <hr>
 
 
+                    <c:forEach var="permiso" items="${userTO.permisos}">
+                        <c:if test="${permiso.modulo.id eq 1}">
+                            <c:if test="${permiso.insertar}">
+                                <c:if test="${permiso.insertar}">
+                                    <button class="btn btn-info form-control mb-2" id="nuevaReservaBtn" data-toggle="modal" data-target="#myNewModal">
+                                        <span class="fas fa-plus"></span> Reserva
+                                    </button>
+                                </c:if>
+                            </c:if>
 
-                    <button class="btn btn-info form-control mb-2" id="nuevaReservaBtn" data-toggle="modal" data-target="#myNewModal">
-                        <span class="fas fa-plus"></span> Reserva
-                    </button>
+                        </c:if>
+                    </c:forEach>
+
+
+
 
                     <form action="ReservaExcel" method="post" class="form-horizontal" role="form" id="formulario" name="formulario">
                         <input style="display: none;" type="text" class="form-control" name="fechaExcel" id="fechaExcel" value="${fecha}">
@@ -166,13 +177,34 @@
                                                                 <td>${reserva.telefono}</td>
                                                                 <td>
 
-                                                                    <button style="margin-bottom: 5px;" class="btn btn-warning btn-sm btnClicked mb-0" id="editar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#myNewModal">
-                                                                        <span class="fas fa-edit"></span> Editar
-                                                                    </button>
 
-                                                                    <button style="margin-bottom: 5px;" class="btn btn-danger btn-sm btnEliminarClicked mb-0" id="eliminar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#modalDelete">
-                                                                        <span class="fas fa-trash"></span> Eliminar
-                                                                    </button>
+
+
+                                                                    <c:forEach var="permiso" items="${userTO.permisos}">
+
+
+                                                                        <c:if test="${permiso.modulo.id eq 1}">
+                                                                            <c:if test="${permiso.editar}">
+                                                                                <button style="margin-bottom: 5px;" class="btn btn-warning btn-sm btnClicked mb-0" id="editar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#myNewModalEdit">
+                                                                                    <span class="fas fa-edit"></span> Editar
+                                                                                </button>
+                                                                            </c:if>
+                                                                            <c:if test="${not permiso.editar}">
+                                                                                <button style="margin-bottom: 5px;" class="btn btn-warning btn-sm btnClicked mb-0" id="editar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#myNewModalEdit">
+                                                                                    <span class="fas fa-search"></span> Ver
+                                                                                </button>
+                                                                            </c:if>
+                                                                        </c:if>
+
+
+                                                                        <c:if test="${permiso.modulo.id eq 1}">
+                                                                            <c:if test="${permiso.eliminar}">
+                                                                                <button style="margin-bottom: 5px;" class="btn btn-danger btn-sm btnEliminarClicked mb-0" id="eliminar" idCancha ="${reserva.idCancha}" fecha ="${reserva.fecha}" horaInicio ="${reserva.horaInicio}" data-toggle="modal" data-target="#modalDelete">
+                                                                                    <span class="fas fa-trash"></span> Eliminar
+                                                                                </button>
+                                                                            </c:if>
+                                                                        </c:if>    
+                                                                    </c:forEach>
 
                                                                 </td>
                                                             </tr>
@@ -188,7 +220,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>    
 
@@ -209,7 +241,6 @@
                                     <div class="col-md-12">
 
                                         <div class="col-md-12">
-                                            <input hidden type="text" class="form-control" id="metodo" name="metodo">
                                             <input hidden type="text" class="form-control" name="estadosNew" id="estadosNew" value="${estadosHidden}">
 
                                             <h5>Datos del contacto</h5>
@@ -220,7 +251,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-user"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control" id="cliente" name="cliente" autofocus="" placeholder="Nombre" required>
+                                                        <input type="text" class="form-control" id="clienteNew" name="clienteNew" autofocus="" placeholder="Nombre" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -229,7 +260,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-id-card"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
+                                                        <input type="text" class="form-control" id="dniNew" name="dniNew" placeholder="DNI" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -238,7 +269,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-phone"></i></div>    
                                                         </div>
-                                                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
+                                                        <input type="text" class="form-control" id="telefonoNew" name="telefonoNew" placeholder="Teléfono" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -252,13 +283,12 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-futbol"></i></div>
                                                         </div>
-                                                        <select class="form-control js-example-basic-single" id="canchaModal" name="canchaModal">
+                                                        <select class="form-control js-example-basic-single" id="canchaNew" name="canchaNew">
                                                             <c:forEach var="obj" items="${canchas}">
                                                                 <option value="${obj.id}">${obj.nombre} - <small>${obj.descripcion}</small></option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
-                                                    <input hidden type="text" class="form-control" id="idCancha" name="idCancha">
                                                 </div>
                                                 <div class="col-md-6">
                                                     Fecha
@@ -266,7 +296,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-clock"></i></div>
                                                         </div>
-                                                        <input type="date" class="form-control" id="fechaModal" name="fechaModal" value="${fecha}">
+                                                        <input type="date" class="form-control" id="fechaNew" name="fechaNew" value="${fecha}">
                                                     </div>
                                                 </div>
 
@@ -280,7 +310,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-clock"></i></div>
                                                         </div>
-                                                        <input type="time" class="form-control" id="horaInicio" name="horaInicio">
+                                                        <input type="time" class="form-control" id="horaInicioNew" name="horaInicioNew">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -289,7 +319,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-clock"></i></div>
                                                         </div>
-                                                        <input type="time" class="form-control" id="horaFin" name="horaFin" data-toggle="tooltip" data-placement="top" title="Hora ocupada">
+                                                        <input type="time" class="form-control" id="horaFinNew" name="horaFinNew" data-toggle="tooltip" data-placement="top" title="Hora ocupada">
                                                     </div>
                                                 </div>
                                             </div>
@@ -302,7 +332,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-money-bill"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="costo" name="costo" readonly="">
+                                                        <input type="text" class="form-control text-right" id="costoNew" name="costoNew" readonly="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -311,7 +341,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-arrow-circle-down"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="descuento" name="descuento">
+                                                        <input type="text" class="form-control text-right" id="descuentoNew" name="descuentoNew">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -320,7 +350,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-money-check"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="total" name="total" readonly="">
+                                                        <input type="text" class="form-control text-right" id="totalNew" name="totalNew" readonly="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -333,12 +363,11 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-list-ul"></i></div>
                                                         </div>
-                                                        <select class="form-control js-example-basic-single" id="estado" name="estado">
+                                                        <select class="form-control js-example-basic-single" id="estadoNew" name="estadoNew">
                                                             <c:forEach var="obj" items="${estadosModal}">
                                                                 <option value="${obj.id}">${obj.descripcion}</option>
                                                             </c:forEach>
                                                         </select>
-                                                        <input hidden type="text"  class="form-control" name="estadosNew" id="estadosNew" value="${estadosHidden}" readonly="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -347,7 +376,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-hand-holding-usd"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="pagado" name="pagado">
+                                                        <input type="text" class="form-control text-right" id="pagadoNew" name="pagadoNew">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -356,7 +385,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-money-check"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="saldo" name="saldo" readonly="">
+                                                        <input type="text" class="form-control text-right" id="saldoNew" name="saldoNew" readonly="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -371,9 +400,204 @@
                                     <i class="fas fa-sign-out-alt"></i> Cerrar
                                 </button>
 
-                                <button type="submit" class="btn btn-primary" id="reservarBtn" disabled="">
-                                    <i class="fas fa-save"></i> Reservar
+                                <c:forEach var="permiso" items="${userTO.permisos}">
+                                    <c:if test="${permiso.modulo.id eq 1}">
+                                        <c:if test="${permiso.insertar}">
+                                            <button type="submit" class="btn btn-primary" id="reservarBtnNew">
+                                                <i class="fas fa-save"></i> Reservar
+                                            </button>
+                                        </c:if>
+                                    </c:if>
+                                </c:forEach>
+
+                            </div>
+                        </form>    
+                    </div> <!--/.modal-content -->
+                </div> <!--/.modal-dialog--> 
+            </div> <!--/.New Test -->
+
+            <!-- Modal Edit -->
+            <div class="modal fade" id="myNewModalEdit" role="dialog" aria-labelledby="myNewModalEdit" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <form action="ReservaEditAdmin" method="post" class="form-horizontal" role="form" id="formulario" name="formulario">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="myModalLabel"><span class="fas fa-edit"></span> Reserva</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
                                 </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="col-md-12">
+                                            <input hidden type="text" class="form-control" name="estadosEdit" id="estadosEdit" value="${estadosHidden}">
+
+                                            <h5>Datos del contacto</h5>
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6">
+                                                    Cliente
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-user"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="clienteEdit" name="clienteEdit" autofocus="" placeholder="Nombre" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    DNI
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-id-card"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="dniEdit" name="dniEdit" placeholder="DNI" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    Teléfono
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-phone"></i></div>    
+                                                        </div>
+                                                        <input type="text" class="form-control" id="telefonoEdit" name="telefonoEdit" placeholder="Teléfono" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <h5>Datos de la reserva</h5>
+
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6">
+                                                    Cancha
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-futbol"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="canchaLabelEdit" name="canchaLabelEdit">
+                                                        <input hidden type="text" class="form-control" id="canchaEdit" name="canchaEdit">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    Fecha
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="date" class="form-control" id="fechaEdit" name="fechaEdit" value="${fecha}">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row col-md-12">
+                                                <div class="col-md-6">
+                                                    Hora inicio
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="time" class="form-control" id="horaInicioEdit" name="horaInicioEdit">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    Hora fin
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-clock"></i></div>
+                                                        </div>
+                                                        <input type="time" class="form-control" id="horaFinEdit" name="horaFinEdit" data-toggle="tooltip" data-placement="top" title="Hora ocupada">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row col-md-12">
+                                                <div class="col-md-4">
+                                                    Costo
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-money-bill"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="costoEdit" name="costoEdit" readonly="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    Descuento
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-arrow-circle-down"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="descuentoEdit" name="descuentoEdit">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    Total
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-money-check"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="totalEdit" name="totalEdit" readonly="">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row col-md-12">
+                                                <div class="col-md-4">
+                                                    Estado
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-list-ul"></i></div>
+                                                        </div>
+                                                        <select class="form-control js-example-basic-single" id="estadoEdit" name="estadoEdit">
+                                                            <c:forEach var="obj" items="${estadosModal}">
+                                                                <option value="${obj.id}">${obj.descripcion}</option>
+                                                            </c:forEach>
+                                                        </select>
+                                                        <!--<input hidden type="text"  class="form-control" name="estadosEdit" id="estadosEdit" value="${estadosHidden}" readonly="">-->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    Pago
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-hand-holding-usd"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="pagadoEdit" name="pagadoEdit">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    Saldo
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-money-check"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="saldoEdit" name="saldoEdit" readonly="">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">  
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar
+                                </button>
+
+                                <c:forEach var="permiso" items="${userTO.permisos}">
+                                    <c:if test="${permiso.modulo.id eq 1}">
+                                        <c:if test="${permiso.editar}">
+                                            <button type="submit" class="btn btn-primary" id="reservarBtnEdit">
+                                                <i class="fas fa-save"></i> Reservar
+                                            </button>
+                                        </c:if>
+                                    </c:if>
+                                </c:forEach>
 
                             </div>
                         </form>    
@@ -435,14 +659,19 @@
         <!-- MENSAJES DE REGISTRO -->
         <c:choose>
             <c:when test="${login eq 0}">
-                <c:if test="${inserted}">
+                <c:if test="${respuesta eq 1}">
                     <script>
                             alertGrowl("Atención: Registro <strong>exitoso</strong>.", "success");
                     </script>
                 </c:if>
-                <c:if test="${not inserted}">
+                <c:if test="${respuesta eq 0}">
                     <script>
                         alertGrowl("Atención: Registro <strong>fallido</strong>.", "danger");
+                    </script>
+                </c:if>
+                <c:if test="${respuesta eq 2}">
+                    <script>
+                        alertGrowl("Atención: Actualización <strong>exitosa</strong>.", "warning");
                     </script>
                 </c:if>
             </c:when>

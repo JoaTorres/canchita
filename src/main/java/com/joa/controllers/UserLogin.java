@@ -1,7 +1,6 @@
 package com.joa.controllers;
 
 import com.joa.classes.CanchaTO;
-import com.joa.classes.ReservaTO;
 import com.joa.classes.SelectTO;
 import com.joa.classes.UserTO;
 import com.joa.dao.CanchaDAO;
@@ -88,6 +87,9 @@ public class UserLogin extends HttpServlet {
             request.setAttribute("estadosHidden", estadosHidden);
             request.setAttribute("estadosNew", estadosHidden);
             request.setAttribute("estadosExcel", estadosHidden);
+            
+            //FLAG LOGIN OR NEW/EDIT
+            request.setAttribute("login", 1);
 
             getServletConfig().getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
 
